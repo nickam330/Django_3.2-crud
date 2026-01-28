@@ -1,4 +1,6 @@
+from rest_framework.decorators import api_view
 from rest_framework.filters import SearchFilter
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -12,12 +14,17 @@ class ProductViewSet(ModelViewSet):
     serializer_class = ProductSerializer
     # при необходимости добавьте параметры фильтрации
     filter_backends = [SearchFilter]
-    search_fields = ['title', 'description', ]
+    search_fields = ['title', 'description']
 
 
 class StockViewSet(ModelViewSet):
     queryset = Stock.objects.all()
     serializer_class = StockSerializer
     # при необходимости добавьте параметры фильтрации
-    filterset_fields = ['products', ]
-    search_fields = ['products__title', 'products__description', ]
+    filter_backends = [SearchFilter]
+    search_fields = ['products__title', 'products__description']
+
+
+@api_view(['GET'])
+def sample_view(request):
+    return Response({'message': 'Я изменен!'})
